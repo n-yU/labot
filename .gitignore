@@ -1,7 +1,9 @@
 .DS_Store
 __pycache__
 
-config.yml
 venv
 work
+
+config.yml
+member.yml
 icon.png

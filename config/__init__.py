@@ -20,9 +20,24 @@ def get_config() -> Dict[str, Any]:
         with open(config_path) as f:
             config = yaml.safe_load(f)
     except Exception as e:
-        logger.error('コンフィグファイルの読み込みに失敗しました')
+        logger.error('コンフィグの読み込みに失敗しました')
         logger.error('フォーマットに問題がある可能性があります')
         logger.error(e)
         exit()
 
     return config
+
+
+def get_member() -> Dict[str, Dict[str, Any]]:
+    member_path = Path('./config/member.yml')
+
+    try:
+        with open(member_path) as f:
+            member = yaml.safe_load(f)
+    except Exception as e:
+        logger.error('メンバーデータの読み込みに失敗しました')
+        logger.error('フォーマットに問題がある可能性があります')
+        logger.error(e)
+        exit()
+
+    return member
