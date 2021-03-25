@@ -1,2 +1,4 @@
 slackbot
 PyYAML
+python-crontab
+croniter

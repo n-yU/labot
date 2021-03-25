@@ -1,6 +1,9 @@
 token: x***-********-********-****************
+name: bot
 icon: https://****.**/***/***.png
 order:
   text: DEFAULT
 group:
   text: DEFAULT
+gcalendar:
+  time: mon9
