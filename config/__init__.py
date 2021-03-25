@@ -31,7 +31,6 @@ class CrontabControl:
         hour = int(time_config[3])
 
         schedule = '* {0} * * {1}'.format(hour, dow)
-        logger.debug(schedule)
         return schedule
 
     def write_job(self, command: str, time_config: str) -> None:

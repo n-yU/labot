@@ -2,3 +2,4 @@ slackbot
 PyYAML
 python-crontab
 croniter
+joblib
