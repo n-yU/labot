@@ -3,7 +3,12 @@
 var calId = ""
 
 function doGet(e) {
-  payload = JSON.stringify(getWeeklyEvents(calId));
+  start_date_year = e.parameter.year;
+  start_date_month = e.parameter.month;
+  start_date_day = e.parameter.day;
+  payload = JSON.stringify(getWeeklyEvents(
+    calId, start_date_year, start_date_month, start_date_day
+  ));
 
   // ref.) https://qiita.com/tfuruya/items/3c306ee03d1ac290bcef
   ContentService.createTextOutput();
@@ -15,18 +20,18 @@ function doGet(e) {
 }
 
 // 1週間のイベントをカレンダーから取得
-function getWeeklyEvents(calId) {
+function getWeeklyEvents(calId, year, month, day) {
   var weeklyEvents = {};
   var cal = CalendarApp.getCalendarById(calId);
-  var today = new Date();
+  var start_date = new Date(year, month, day);
   
   for(var elapsedDays=0; elapsedDays<7; elapsedDays++) {
-    var events = cal.getEventsForDay(today);
+    var events = cal.getEventsForDay(start_date);
     var n_event = events.length;  // イベント数
 
     // イベントなし -> 次の日へ
     if(n_event == 0) {
-      today.setDate(today.getDate() + 1);
+      start_date.setDate(start_date.getDate() + 1);
       continue;
     }
 
@@ -42,7 +47,7 @@ function getWeeklyEvents(calId) {
       weeklyEvents[elapsedDays][eventTime] = eventTitle;
     }
     
-    today.setDate(today.getDate() + 1);
+    start_date.setDate(start_date.getDate() + 1);
   }
   
   return weeklyEvents;

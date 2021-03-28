@@ -7,3 +7,7 @@ group:
   text: DEFAULT
 gcalendar:
   time: mon9
+  gas: https://script.google.com/macros/s/******/exec
+  colors: [f8e352, d5848b, 7b9ad0, 51a1a2, ae8dbc, c08e47, e5ab47]
+  channel: calendar
+  msg: お疲れ様です！今週も頑張っていきましょう！
