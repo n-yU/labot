@@ -4,8 +4,8 @@ from datetime import datetime as dt
 from datetime import timedelta
 # from slackbot.bot import listen_to
 
-from config import get_config, get_member, get_slack
-from plugins.send import send_slacker
+from config import get_config
+import plugins.post as post
 
 logger = getLogger(__name__)
 handler = StreamHandler()
@@ -37,7 +37,7 @@ def main(message):
         msg = 'Googleカレンダーから{0}のイベントを取得することに失敗しました（ステータスコード: {1}）．\n \
             詳しくはログを確認してください．'.format(period, response.status_code)
 
-        send_slacker(channel='bot', msg=msg, _type='error')
+        post.slacker_simple_message(channel='bot', msg=msg, _type='error')
         return
 
     weekly_events = response.json()
@@ -60,10 +60,10 @@ def main(message):
         attc = dict(text=text, color=wod_colors[date.weekday()])
         attachments.append(attc)
 
-    slack, uname, icon, channel = get_slack(), conf['name'], conf['icon'], conf['gcalendar']['channel']
+    channel = conf['gcalendar']['channel']
     msg = '<!channel>\n{}\n\n'.format(conf['gcalendar']['msg'])
     msg += '*【今週({})のイベント】*\n'.format(period)
-    slack.chat.post_message(channel, msg, as_user=False, username=uname, icon_url=icon, attachments=attachments)
+    post.slacker_custom_message(channel=channel, attachments=attachments, text=msg)
 
 
 if __name__ == '__main__':

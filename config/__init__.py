@@ -3,8 +3,10 @@ from sys import exit
 from typing import Dict, Any
 from pathlib import Path
 import yaml
+
 from slacker import Slacker
 from crontab import CronTab
+
 
 logger = getLogger(__name__)
 handler = StreamHandler()
