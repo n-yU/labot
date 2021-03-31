@@ -8,7 +8,7 @@
 ## 環境
 開発環境で，以下では動作確認済みという意味です．特別なことはしてないので3系であれば動くと思います．
 
-- Python 3.8.1
+- Python 3.8.2
 - [dev_requirements.txt](./dev_requirements.txt)
 - まずはお好きな3系バージョンで[requirements.txt](./requirements.txt)のライブラリを入れてみてください．（使い方参照）
 

@@ -1,13 +1,13 @@
 from logging import getLogger, StreamHandler, DEBUG, Formatter
 from typing import List, Dict, Any
-import json
 from random import shuffle
 from slackbot.dispatcher import Message
 from slackbot.bot import listen_to
 
 from config import get_config, get_member
+import plugins.post as post
 
-
+# ロガー設定
 logger = getLogger(__name__)
 handler = StreamHandler()
 handler.setLevel(DEBUG)
@@ -18,31 +18,56 @@ handler.setFormatter(Formatter('[labot] %(message)s'))
 
 
 @listen_to(r'^!shuffle$')
-def listen_custom_shuffle(message: Message):
+def listen_custom_shuffle(message: Message) -> None:
+    """シャッフルコマンドを受け取り，シャッフルされた学生メンバーの順番をポストする
+
+    Args:
+        message (Message): slackbot.dispatcher.Message
+    """
     member = get_member()
+
+    # シャッフル対象のメンバークラスが未付与 -> クラス=学生とみなす
     order = get_shuffle_order(message=message, member=member, _class='student')
     send(message=message, order=order, _class='student')
 
 
 @listen_to(r'^!shuffle\s')
-def listen_normal_shuffle(message: Message):
+def listen_normal_shuffle(message: Message) -> None:
+    """シャッフルコマンドを受け取り，シャッフルされた指定クラスに所属するメンバーの順番をポストする
+
+    Args:
+        message (Message): slackbot.dispatcher.Message
+    """
     member = get_member()
-    _class = message.body['text'].split()[1]
+    _class = message.body['text'].split()[1]    # !shuffle [class]
     order = get_shuffle_order(message=message, member=member, _class=_class)
+
+    # 指定クラスに所属するメンバーが1人以上 -> シャッフル結果送信
     if order:
         send(message=message, order=order, _class=_class)
 
 
 def get_shuffle_order(message: Message, member: Dict[str, Dict[str, Any]], _class: str) -> List[str]:
+    """指定クラスメンバーの順番をシャッフルする
+
+    Args:
+        message (Message): slackbot.dispatcher.Message
+        member (Dict[str, Dict[str, Any]]): メンバー情報（config.get_member()参照）
+        _class (str): メンバークラス
+
+    Returns:
+        List[str]: シャッフルされた指定クラスメンバーリスト
+    """
+    # all -> 全メンバーをシャッフル対象にする
     if _class == 'all':
         selected_member = list(member.keys())
     else:
         selected_member = [k for k, v in member.items() if _class in v['class']]
 
     if len(selected_member) == 0:
-        msg = '指定クラス `{0}` に属するメンバーは存在しません'.format(_class)
-        attachments = [dict(text=msg, color='#c93a40')]
-        message.send_webapi('', json.dumps(attachments), as_user=False)
+        # 指定クラスメンバーが0人 -> エラーメッセージ返しシャッフルしない
+        text = '指定クラス `{0}` に属するメンバーは存在しません'.format(_class)
+        post.slackbot_simple_message(message=message, text=text, _type='error')
         return False
     else:
         shuffle(selected_member)
@@ -50,12 +75,23 @@ def get_shuffle_order(message: Message, member: Dict[str, Dict[str, Any]], _clas
 
 
 def send(message: Message, order: List[str], _class: str) -> None:
+    """シャッフルされたメンバーリストをポストする
+
+    Args:
+        message (Message): slackbot.dispatcher.Message
+        order (List[str]): シャッフルされたメンバーリスト
+        _class (str): 指定クラス
+    """
+    # シャッフル順番ポスト時の冒頭テキスト設定
     custom_text = get_config()['order']['text']
     if custom_text == 'DEFAULT':
-        text = '`{0}`のメンバーの順番をシャッフルしました'.format(_class)
+        if _class == 'all':
+            text = '全メンバーの順番をシャッフルしました'
+        else:
+            text = '`{0}`のメンバーの順番をシャッフルしました'.format(_class)
     else:
         text = custom_text
 
-    msg = '*{}*\n\n'.format(text) + ' → '.join(order)
-    attachments = [dict(text=msg, color='#56a764')]
-    message.send_webapi('', json.dumps(attachments), as_user=False)
+    # "メンバー → メンバー"という形式で表示
+    text = '*{}*\n\n'.format(text) + ' → '.join(order)
+    post.slackbot_simple_message(message=message, text=text, _type='info')

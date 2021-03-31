@@ -1,5 +1,6 @@
 from logging import getLogger, StreamHandler, DEBUG, Formatter
 from typing import List, Dict
+import json
 from config import get_config, get_slack
 from slackbot.dispatcher import Message
 
@@ -12,10 +13,6 @@ logger.propagate = False
 handler.setFormatter(Formatter('[labot] %(message)s'))
 
 
-def hoge_slackbot(msg: str, _type: str):
-    pass
-
-
 def get_attachments_by_type(text: str, _type: str) -> List[Dict[str, str]]:
     if _type == 'info':
         attachments = [dict(text=text, color='#56a764')]
@@ -25,6 +22,11 @@ def get_attachments_by_type(text: str, _type: str) -> List[Dict[str, str]]:
         attachments = [dict(text=text, color='#c93a40')]
 
     return attachments
+
+
+def slackbot_simple_message(message: Message, text: str, _type: str, pre_text='') -> None:
+    attachments = get_attachments_by_type(text=text, _type=_type)
+    message.send_webapi('', json.dumps(attachments), as_user=False)
 
 
 def slacker_simple_message(channel: str, msg: str, _type: str) -> None:

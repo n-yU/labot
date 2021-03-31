@@ -1,5 +1,5 @@
 slackbot==1.0.0
 PyYAML==5.4.1
 python-crontab==2.5.1
-croniter==1.0.9
+croniter==1.0.10
 joblib==1.0.1
