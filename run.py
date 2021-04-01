@@ -6,16 +6,22 @@ from slackbot.bot import Bot
 from config import get_config, CrontabControl
 
 
-def process(step: int):
-    if step == 0:
+def process(step: int) -> None:
+    """プロセスを並列実行する
+
+    Args:
+        step (int): 実行ステップ
+    """
+    if step == 1:    # step.1 - ジョブ定期実行のためのCrontabの実行
         conf = get_config()
-        crocon = CrontabControl(tabfile=Path('./config/job.txt'))
+        crocon = CrontabControl(tabfile=Path('./config/job.txt'))   # Crontabインスタンス生成
+        # gcalendarプラグインの定期実行ジョブ設定
         crocon.write_job(command='python3 ./plugins/gcalendar.py', time_config=conf['gcalendar']['time'])
-        crocon.monitor()
-    elif step == 1:
+        crocon.monitor()    # ジョブ監視開始
+    elif step == 2:  # step.2 - slackbot稼働
         bot = Bot()
         bot.run()
-    else:
+    else:            # step.3 - Bot起動成功通知
         logger = getLogger(__name__)
         handler = StreamHandler()
         handler.setLevel(DEBUG)
@@ -28,10 +34,12 @@ def process(step: int):
 
 
 def main():
+    # 自作パッケージ用環境変数設定
     os.environ['PYTHONPATH'] = '{0}:{1}'.format(
         os.environ.get('PYTHONPATH'), str(Path('./').resolve()))
 
-    Parallel(n_jobs=3)([delayed(process)(step=step) for step in range(3)])
+    # crontabとslackbotの実行
+    Parallel(n_jobs=3)([delayed(process)(step=step) for step in [1, 2, 3]])
 
 
 if __name__ == '__main__':

@@ -2,7 +2,8 @@ import requests
 from logging import getLogger, StreamHandler, DEBUG, Formatter
 from datetime import datetime as dt
 from datetime import timedelta
-from slackbot.bot import listen_to  # デバッグ用
+from slackbot.dispatcher import Message
+# from slackbot.bot import listen_to  # デバッグ用
 
 from config import get_config
 import plugins.post as post
@@ -17,12 +18,12 @@ logger.propagate = False
 handler.setFormatter(Formatter('[labot] %(message)s'))
 
 
-@listen_to(r'^!gcal$')            # デバッグ用
-def main(message):
+# @listen_to(r'^!gcal$')            # デバッグ用
+def main(message: Message):
     """Googleカレンダーから1週間分のイベントを取得し，指定チャンネルにポストする
 
     Args:
-        message ([type]): slackbot.dispatcher.Message
+        message (Message): slackbot.dispatcher.Message
     """
     conf = get_config()
     gas = conf['gcalendar']['gas']          # GAS ウェブアプリURL

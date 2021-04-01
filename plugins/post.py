@@ -41,7 +41,7 @@ def get_attachments_by_type(text: str, _type: str) -> List[Dict[str, str]]:
 
 
 def slackbot_simple_message(message: Message, text: str, _type: str, pre_text='') -> None:
-    """slackbotを使ったシングルアタッチメントメッセージ送信
+    """slackbotを使い，シングルアタッチメントメッセージを送信する
 
     Args:
         message (Message): slackbot.dispatcher.Message
@@ -60,7 +60,7 @@ def slackbot_custom_message(message: Message, attachments: List[Dict[str, str]],
 
 
 def slacker_simple_message(channel: str, msg: str, _type: str) -> None:
-    """slackerを使ったシングルアタッチメントメッセージ送信
+    """slackerを使い，シングルアタッチメントメッセージを送信する
 
     Args:
         channel (str): 送信チャンネル名
@@ -78,7 +78,7 @@ def slacker_simple_message(channel: str, msg: str, _type: str) -> None:
 
 
 def slacker_custom_message(channel: str, attachments: List[Dict[str, str]], pre_text='') -> None:
-    """slackerを使ったマルチアタッチメントメッセージ送信
+    """slackerを使い，マルチアタッチメントメッセージを送信する
 
     Args:
         channel (str): 送信チャンネル名
@@ -92,7 +92,7 @@ def slacker_custom_message(channel: str, attachments: List[Dict[str, str]], pre_
 
 
 def slacker_simple_ephemeral(message: Message, text: str, _type: str) -> None:
-    """slackerを使ったシングルアタッチメント隠しメッセージ送信
+    """slackerを使い，シングルアタッチメント隠しメッセージを送信する
 
     Args:
         message (Message): slackbot.dispatcher.Message
