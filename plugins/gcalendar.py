@@ -80,7 +80,7 @@ def main(message: Message):
         attc = dict(text=text, color=wod_colors[date.weekday()])    # アタッチメント（曜日）カラー設定
         attachments.append(attc)
 
-    pre_text = '<!channel>\n{}\n\n'.format(conf['gcalendar']['msg'])
+    pre_text = '<!channel>\n{}\n\n'.format(conf['gcalendar']['text'])
     pre_text += '*【今週({})のイベント】*\n'.format(period)
     post.slacker_custom_message(channel=channel, attachments=attachments, pre_text=pre_text)
 
