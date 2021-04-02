@@ -5,6 +5,8 @@ from joblib import Parallel, delayed
 from slackbot.bot import Bot
 from config import get_config, CrontabControl
 
+VERSION = '1.0.0-alpha'
+
 
 def process(step: int) -> None:
     """プロセスを並列実行する
@@ -12,6 +14,8 @@ def process(step: int) -> None:
     Args:
         step (int): 実行ステップ
     """
+    global VERSION
+
     if step == 1:    # step.1 - ジョブ定期実行のためのCrontabの実行
         conf = get_config()
         crocon = CrontabControl(tabfile=Path('./config/job.txt'))   # Crontabインスタンス生成
@@ -28,9 +32,9 @@ def process(step: int) -> None:
         logger.setLevel(DEBUG)
         logger.addHandler(handler)
         logger.propagate = False
-        handler.setFormatter(Formatter('[labot] %(message)s'))
+        handler.setFormatter(Formatter('[labot] %(asctime)s - %(message)s'))
 
-        logger.debug('Botの起動に成功しました')
+        logger.debug('labot (v{0}) を起動しました'.format(VERSION))
 
 
 def main():

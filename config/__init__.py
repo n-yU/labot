@@ -14,7 +14,7 @@ handler.setLevel(DEBUG)
 logger.setLevel(DEBUG)
 logger.addHandler(handler)
 logger.propagate = False
-handler.setFormatter(Formatter('[labot] %(message)s'))
+handler.setFormatter(Formatter('[labot] %(asctime)s - %(message)s'))
 
 
 class CrontabControl():

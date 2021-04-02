@@ -1,25 +1,12 @@
-from logging import getLogger, StreamHandler, DEBUG, Formatter
 from typing import List, Dict, Any
 from random import shuffle
 from slackbot.dispatcher import Message
-from slackbot.bot import listen_to
-
 from config import get_config, get_member
 import plugins.post as post
 
-# ロガー設定
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
-handler.setFormatter(Formatter('[labot] %(message)s'))
 
-
-@listen_to(r'^!shuffle$')
-def listen_custom_shuffle(message: Message) -> None:
-    """シャッフルコマンドを受け取り，シャッフルされた学生メンバーの順番をポストする
+def custom_shuffle(message: Message) -> None:
+    """学生クラスに所属するメンバーの順番をシャッフルし，結果をポストする
 
     Args:
         message (Message): slackbot.dispatcher.Message
@@ -31,9 +18,8 @@ def listen_custom_shuffle(message: Message) -> None:
     send(message=message, order=order, _class='student')
 
 
-@listen_to(r'^!shuffle\s')
-def listen_normal_shuffle(message: Message) -> None:
-    """シャッフルコマンドを受け取り，シャッフルされた指定クラスに所属するメンバーの順番をポストする
+def normal_shuffle(message: Message) -> None:
+    """指定クラスに所属するメンバーの順番をシャッフルし，結果をポストする
 
     Args:
         message (Message): slackbot.dispatcher.Message
@@ -42,7 +28,7 @@ def listen_normal_shuffle(message: Message) -> None:
     _class = message.body['text'].split()[1]    # !shuffle [class]
     order = get_shuffle_order(message=message, member=member, _class=_class)
 
-    # 指定クラスに所属するメンバーが1人以上 -> シャッフル結果送信
+    # 指定クラスに所属するメンバーが1人以上 -> シャッフル結果ポスト
     if order:
         send(message=message, order=order, _class=_class)
 

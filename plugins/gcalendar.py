@@ -1,9 +1,9 @@
 import requests
 from logging import getLogger, StreamHandler, DEBUG, Formatter
+from typing import Tuple, List, Dict
 from datetime import datetime as dt
 from datetime import timedelta
 from slackbot.dispatcher import Message
-# from slackbot.bot import listen_to  # デバッグ用
 
 from config import get_config
 import plugins.post as post
@@ -15,19 +15,20 @@ handler.setLevel(DEBUG)
 logger.setLevel(DEBUG)
 logger.addHandler(handler)
 logger.propagate = False
-handler.setFormatter(Formatter('[labot] %(message)s'))
+handler.setFormatter(Formatter('[labot] %(asctime)s - %(message)s'))
 
 
-# @listen_to(r'^!gcal$')            # デバッグ用
-def main(message: Message):
-    """Googleカレンダーから1週間分のイベントを取得し，指定チャンネルにポストする
+def get_week_event(channel: str) -> Tuple[bool, List[Dict[str, str]], str]:
+    """ウィークイベントを登録しているGoogleカレンダーから取得する
 
     Args:
-        message (Message): slackbot.dispatcher.Message
+        channel (str): ポストチャンネル名
+
+    Returns:
+        Tuple[bool, List[Dict[str, str]], str]: 取得成否，ウィークイベントアタッチメント，冒頭テキスト
     """
     conf = get_config()
     gas = conf['gcalendar']['gas']          # GAS ウェブアプリURL
-    channel = conf['gcalendar']['channel']  # ポストチャンネル
 
     # start_date = dt(2021, 2, 8)   # デバッグ用
     start_date = dt.now()                       # 取得開始日（実行日）
@@ -49,7 +50,7 @@ def main(message: Message):
             詳しくはログを確認してください．'.format(period, response.status_code)
 
         post.slacker_simple_message(channel=channel, text=text, _type='error')
-        return
+        return False, [], ''
 
     weekly_events = response.json()  # GASから取得したJSONを辞書に変換
 
@@ -80,9 +81,35 @@ def main(message: Message):
         attc = dict(text=text, color=wod_colors[date.weekday()])    # アタッチメント（曜日）カラー設定
         attachments.append(attc)
 
-    pre_text = '<!channel>\n{}\n\n'.format(conf['gcalendar']['text'])
-    pre_text += '*【今週({})のイベント】*\n'.format(period)
-    post.slacker_custom_message(channel=channel, attachments=attachments, pre_text=pre_text)
+    pre_text = '*【今週({})のイベント】*\n'.format(period)
+
+    return True, attachments, pre_text
+
+
+def ephemeral_post_event(message: Message):
+    """コマンドに応じてウィークイベントを取得し，指定チャンネルに隠しメッセージとしてポストする
+    """
+    conf = get_config()
+    channel = conf['gcalendar']['channel']  # ポストチャンネル
+
+    result, attachments, pre_text = get_week_event(channel=channel)
+    if result:
+        post.slacker_custom_ephemeral(message=message, attachments=attachments, pre_text=pre_text)
+
+
+def main(message: Message):
+    """スケジュール設定に応じてウィークイベントを取得し，指定チャンネルにポストする
+
+    Args:
+        message (Message): slackbot.dispatcher.Message
+    """
+    conf = get_config()
+    channel = conf['gcalendar']['channel']  # ポストチャンネル
+
+    result, attachments, pre_text = get_week_event(channel=channel)
+    pre_text = '<!channel>\n{}\n\n'.format(conf['gcalendar']['text']) + pre_text
+    if result:
+        post.slacker_custom_message(channel=channel, attachments=attachments, pre_text=pre_text)
 
 
 if __name__ == '__main__':

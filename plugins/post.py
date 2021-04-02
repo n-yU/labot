@@ -1,17 +1,7 @@
-from logging import getLogger, StreamHandler, DEBUG, Formatter
 from typing import List, Dict
 import json
 from config import get_config, get_slack
 from slackbot.dispatcher import Message
-
-# ロガー設定
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
-handler.setFormatter(Formatter('[labot] %(message)s'))
 
 
 def get_attachments_by_type(text: str, _type: str) -> List[Dict[str, str]]:
@@ -59,7 +49,7 @@ def slackbot_custom_message(message: Message, attachments: List[Dict[str, str]],
     pass
 
 
-def slacker_simple_message(channel: str, msg: str, _type: str) -> None:
+def slacker_simple_message(channel: str, text: str, _type: str) -> None:
     """slackerを使い，シングルアタッチメントメッセージを送信する
 
     Args:
@@ -71,7 +61,7 @@ def slacker_simple_message(channel: str, msg: str, _type: str) -> None:
     conf = get_config()
     slack, uname, icon = get_slack(), conf['name'], conf['icon']
 
-    attachments = get_attachments_by_type(text=msg, _type=_type)
+    attachments = get_attachments_by_type(text=text, _type=_type)
 
     # as_user=False -> "username"と"icon_url"によるtoken発行ユーザによってメッセージ送信
     slack.chat.post_message(channel, '', as_user=False, username=uname, icon_url=icon, attachments=attachments)
@@ -108,7 +98,7 @@ def slacker_simple_ephemeral(message: Message, text: str, _type: str) -> None:
 
 
 def slacker_custom_ephemeral(message: Message, attachments: List[Dict[str, str]], pre_text='') -> None:
-    """slackerを使ったマルチアタッチメント隠しメッセージ送信
+    """slackerを使ったマルチアタッチメント隠しメッセージを送信する
 
     Args:
         message (Message): slackbot.dispatcher.Message

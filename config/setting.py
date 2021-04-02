@@ -1,24 +1,10 @@
-from logging import getLogger, StreamHandler, DEBUG, Formatter
-
 from slackbot.dispatcher import Message
-from slackbot.bot import listen_to
-
 from config import get_member
 import plugins.post as post
 
-# ロガー設定
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
-handler.setFormatter(Formatter('[labot] %(message)s'))
 
-
-@listen_to(r'^!config member$')
 def post_all_member(message: Message) -> None:
-    """configコマンドを受け取り，メンバー設定ファイルに登録されている全メンバーをポストする
+    """メンバー設定ファイルに登録されている全メンバーをポストする
 
     Args:
         message (Message): slackbot.dispatcher.Message
@@ -41,9 +27,8 @@ def post_all_member(message: Message) -> None:
     post.slacker_custom_ephemeral(message=message, attachments=attc, text=pre_text)
 
 
-@listen_to(r'^!config member\s')
 def post_member(message: Message) -> None:
-    """configコマンドを受け取り，指定したメンバーの詳細をポストする
+    """指定したメンバーの詳細をポストする
 
     Args:
         message (Message): slackbot.dispatcher.Message
@@ -72,9 +57,8 @@ def post_member(message: Message) -> None:
     post.slacker_custom_ephemeral(message=message, attachments=attc, text=pre_text)
 
 
-@listen_to(r'^!config cmember$')
 def post_all_classified_member(message: Message) -> None:
-    """configコマンドを受け取り，全メンバーをクラスごとに分類してポストする
+    """全メンバーをクラスごとに分類してポストする
 
     Args:
         message (Message): slackbot.dispatcher.Message
@@ -102,9 +86,8 @@ def post_all_classified_member(message: Message) -> None:
     post.slacker_custom_ephemeral(message=message, attachments=attc, text=pre_text)
 
 
-@listen_to(r'^!config cmember\s')
 def post_class_member(message: Message) -> None:
-    """configコマンドを受け取り，指定クラスに所属するメンバーリストをポストする
+    """指定クラスに所属するメンバーリストをポストする
 
     Args:
         message (Message): slackbot.dispatcher.Message

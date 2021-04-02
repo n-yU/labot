@@ -1,25 +1,12 @@
-from logging import getLogger, StreamHandler, DEBUG, Formatter
 from typing import List
 from slackbot.dispatcher import Message
-from slackbot.bot import listen_to
-
 from config import get_config, get_member
 from plugins.order import get_shuffle_order
 import plugins.post as post
 
-# ロガー設定
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
-handler.setFormatter(Formatter('[labot] %(message)s'))
 
-
-@listen_to(r'^!group [a-z][0-9]+ [a-z]+$')
-def listen_group(message: Message) -> None:
-    """グループコマンドを受け取り，指定設定から生成されるグループリストをポストする
+def group(message: Message) -> None:
+    """指定設定からグループリストを生成し，結果をポストする
 
     Args:
         message (Message): slackbot.dispatcher.Message

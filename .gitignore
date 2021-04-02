@@ -2,6 +2,7 @@
 __pycache__
 
 venv
+venv_mb
 work
 
 config.yml
