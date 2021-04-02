@@ -7,8 +7,23 @@
 - プルリク大歓迎です．また追加希望等ございましたら，適宜イシューを立てて貰えればと思います．
 
 <!-- ref.) https://github.com/technote-space/toc-generator/blob/master/README.ja.md -->
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [環境](#%E7%92%B0%E5%A2%83)
+- [ディレクトリ構成](#%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E6%A7%8B%E6%88%90)
+- [起動までの流れ](#%E8%B5%B7%E5%8B%95%E3%81%BE%E3%81%A7%E3%81%AE%E6%B5%81%E3%82%8C)
+- [設定](#%E8%A8%AD%E5%AE%9A)
+  - [Bot設定 - config.yml](#bot%E8%A8%AD%E5%AE%9A---configyml)
+  - [研究室メンバー設定 - member.yml](#%E7%A0%94%E7%A9%B6%E5%AE%A4%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC%E8%A8%AD%E5%AE%9A---memberyml)
+- [プラグイン](#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3)
+  - [**order** - 順番シャッフル](#order---%E9%A0%86%E7%95%AA%E3%82%B7%E3%83%A3%E3%83%83%E3%83%95%E3%83%AB)
+  - [**group** - グループ分け](#group---%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97%E5%88%86%E3%81%91)
+  - [**gcalendar** - Googleカレンダー](#gcalendar---google%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC)
+- [お問い合わせ](#%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 ## 環境
