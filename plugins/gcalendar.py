@@ -86,6 +86,21 @@ def get_week_event(channel: str) -> Tuple[bool, List[Dict[str, str]], str]:
     return True, attachments, pre_text
 
 
+def get_schedule(message: Message) -> None:
+    """Googleカレンダーからウィークイベントを自動取得する曜日＆時間を取得する
+
+    Args:
+        message (Message): slackbot.dispatcher.Message
+    """
+    dows = dict(zip(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+                    ['月', '火', '水', '木' '金', '土', '日']))
+    schedule = get_config()['gcalendar']['time']
+
+    dow, time = dows[schedule[:3]], schedule[3]  # schedule: [dow(アルファベット3文字)][time]
+    text = 'Googleカレンダーからのウィークイベント取得は毎週{0}曜{1}時に設定されてます'.format(dow, time)
+    post.slacker_simple_ephemeral(message=message, text=text, _type='info')
+
+
 def ephemeral_post_event(message: Message):
     """コマンドに応じてウィークイベントを取得し，指定チャンネルに隠しメッセージとしてポストする
     """

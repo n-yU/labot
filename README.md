@@ -1,5 +1,5 @@
 # labot
-[v1.0.0] 研究室用スラックボット - *Slack Bot for Laboratory*
+[v1.0.0-alpha] 研究室用スラックボット - *Slack Bot for Laboratory*
 
 - 研究室用のSlackワークスペースを利用している方に便利なSlackボットです．
 - 私が所属する大学研究室のSlackワークスペースで以前から実際に稼働していたボットがベースです．
@@ -59,6 +59,7 @@
 │   ├── gcalendar.py        プラグイン:Googleカレンダー
 │   ├── group.py            プラグイン:グループ分け
 │   ├── order.py            プラグイン:順番シャッフル
+│   ├── listen.py           コマンド受け取り
 │   └── post.py             メッセージ投稿
 ├── run.py                  Bot起動スクリプト
 └── slackbot_settings.py    slackbot設定ファイル（編集不要）
@@ -133,17 +134,17 @@ gcalendar:
     - `colors` - 投稿メッセージに使用する曜日カラー．16進数カラーコードで指定する（シャープ不要）．デフォルトカラーは以下の通り．
 
         <!-- - ref.) https://qiita.com/suin/items/1f3898c1fa108b1e47b1 -->
-        ![](https://via.placeholder.com/16/f8e352/FFFFFF/?text=%20) `月 `
-        ![](https://via.placeholder.com/16/d5848b/FFFFFF/?text=%20) `火 `
-        ![](https://via.placeholder.com/16/7b9ad0/FFFFFF/?text=%20) `水 `
-        ![](https://via.placeholder.com/16/51a1a2/FFFFFF/?text=%20) `木 `
-        ![](https://via.placeholder.com/16/ae8dbc/FFFFFF/?text=%20) `金 `
-        ![](https://via.placeholder.com/16/c08e47/FFFFFF/?text=%20) `土 `
-        ![](https://via.placeholder.com/16/e5ab47/FFFFFF/?text=%20) `日 `      
+        ![](https://via.placeholder.com/16/f8e352/FFFFFF/?text=%20) `月` 
+        ![](https://via.placeholder.com/16/d5848b/FFFFFF/?text=%20) `火` 
+        ![](https://via.placeholder.com/16/7b9ad0/FFFFFF/?text=%20) `水` 
+        ![](https://via.placeholder.com/16/51a1a2/FFFFFF/?text=%20) `木` 
+        ![](https://via.placeholder.com/16/ae8dbc/FFFFFF/?text=%20) `金` 
+        ![](https://via.placeholder.com/16/c08e47/FFFFFF/?text=%20) `土` 
+        ![](https://via.placeholder.com/16/e5ab47/FFFFFF/?text=%20) `日`     
     - `text` - ウィークイベント投稿時の冒頭テキスト
 
 #### コマンド
-..
+コマンドでの読み書きはできません．`config.yml` を参照・編集してください．
 
 
 ### 研究室メンバー設定 - [member.yml](./_member.yml)
@@ -163,8 +164,40 @@ FamilyName:
         - `all` というクラス名は与えないでください．
 
 #### コマンド
-.
-
+- 全メンバーの情報を取得する
+    ```
+    !config get member
+    ```
+- 指定メンバーの情報を取得する
+    ```
+    !config get member [FamilyName]
+    ```
+    - `FamilyName` - メンバー姓
+    - `FamilyName`はキャピタライズされるため，大文字小文字が混在してても正常に動作します．
+- 全メンバークラスを取得する
+    ```
+    !config get class
+    ```
+- 指定メンバークラスを取得する
+    ```
+    !config get class [class]
+    ```
+    - `class` - メンバークラス名
+- 指定メンバーの情報を編集する
+    ```
+    !config edit [FamilyName] [info] [value]
+    ```
+    - `FamilyName` - メンバー姓
+    - `info` - 情報名
+    - `value` - `info`の新しい値
+    - 例1: メンバー `Sato` の `name` を `Ichiro` にする
+        ```
+        !config edit Sato name Ichiro
+        ```
+    - 例2: メンバー `Tanaka` の `class` を`student,M1` にする
+        ```
+        !config edit Tanaka class student,M1
+        ```
 
 ## プラグイン
 - このBotには現在以下のプラグイン（機能）が用意されてます．
@@ -176,15 +209,15 @@ FamilyName:
 - コマンド
     - `!shuffle [class]`
         - `class`: メンバークラス名
-    - 例: `student` クラスに所属するメンバー（学生）の順番をシャッフルして投稿します．
+    - 例1: `student` クラスに所属するメンバー（学生）の順番をシャッフルする
         ```
         !shuffle
         ```
-    - 例: `!shuffle [class]` の場合，`class`に所属するメンバーがシャッフル対象になります．`student`をクラス名とした場合，上記コマンドと同じ挙動になります．
+    - 例2: `!shuffle [class]` の場合，`class`に所属するメンバーがシャッフル対象になる．
         ```
         !shuffle M1
         ```
-    - 例: クラス名を `all` にすると，`member.yml` に登録されている全メンバーが対象になります．
+    - 例3: クラス名を `all` にすると，`member.yml` に登録されている全メンバーが対象になる．
         ```
         !shuffle all
         ```
@@ -199,11 +232,11 @@ FamilyName:
         - `standard`: グループ分け基準（`n`:グループ数 / `s`:1グループメンバー数）
         - `value`: グループ分け基準の設定値
         - `class`: メンバークラス名（`all` にすると全メンバーが対象）
-    - 例: `student` クラスに所属するメンバー（学生）を3つのグループに分けます．
+    - 例1: `student` クラスに所属するメンバー（学生）を3つのグループに分ける．
         ```
         !group n3 student
         ```
-    - 例: 全メンバーを対象に2人のグループ（ペア）を作ります．
+    - 例2: 全メンバーを対象に2人のグループ（ペア）を作る．
         ```
         !group n2 all
         ```
@@ -212,6 +245,11 @@ FamilyName:
 - GASで登録したGoogleカレンダーから取得日を含む1週間分のイベント（ウィークイベント）を取得し，投稿します．
 - Googleカレンダー登録の詳細は[guide.md](./guide.md)を確認してください．
 - ウィークイベントは `config.yml` で指定した曜日＆時間に自動的に毎週投稿されます．
+- 定期実行だけでなく，以下コマンドでウィークイベントを確認することもできます．
+- コマンド
+    - `!gcal` - コマンド実行日を含む1週間先までの予定をGoogleカレンダーから取得する．
+    - `!gcal schedule` - Googleカレンダーからイベントを自動的に取得する曜日と時間を取得する．
+
 
 ## お問い合わせ
 - 本リポジトリについて質問等ありましたら，[Twitter](https://twitter.com/nyu923)へのリプライが最も反応が早いです（DMはご遠慮ください）．

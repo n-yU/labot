@@ -110,6 +110,23 @@ def get_member() -> Dict[str, Dict[str, Any]]:
     return member
 
 
+def update_member(member: Dict[str, Any]) -> None:
+    """研究室メンバー設定ファイル（yml形式）を更新する
+
+    Args:
+        member (Dict[str, Any]): 研究室メンバー
+    """
+    member_path = Path('./config/member.yml')
+
+    try:
+        with open(member_path, mode='w') as f:
+            yaml.dump(member, f, default_flow_style=False)
+    except Exception as e:
+        logger.error('メンバーデータの書き込みに失敗しました')
+        logger.error(e)
+        exit()
+
+
 def get_slack() -> Slacker:
     """Slackerインスタンス（Python interface for the Slack API）を取得する
 
