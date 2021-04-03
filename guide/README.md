@@ -92,18 +92,133 @@ icon: https://****.**/***/***.png
 
 
 ## 【3】設定ファイルの編集
-所要時間 - 5分
+所要時間 - 5分~ (研究室メンバー数による)
+
+設定はyml形式のファイルで管理されてます．ymlはフォーマットが少しでも異なると正常に読み込まれません．ファイルを編集する際は以下のことを守ってください．他にもルールはありますが，ここでは特に注意すべき点を挙げます．
+
+- 各項目のコロン(`:`)の後には半角スペースを空ける．
+- 項目ごとに改行する．
+- インデントにはタブを使わず，半角スペースを使う（半角スペース2文字を推奨します）．
+
+
+### 3.1. ボット全般の設定
+基本的には設定変更の必要はないため，スキップしても構いません．
+
+ボット全般の設定は `config/config.yml` で行います． `config.yml` は以下のような内容になっています．
+
+```yml
+token: x***-********-********-****************
+name: bot
+icon: https://****.**/***/***.png
+order:
+  text: DEFAULT
+group:
+  text: DEFAULT
+gcalendar:
+  gas: https://script.google.com/macros/s/******/exec
+  channel: calendar
+  time: mon9
+  colors: [f8e352, d5848b, 7b9ad0, 51a1a2, ae8dbc, c08e47, e5ab47]
+  msg: お疲れ様です！今週も頑張っていきましょう！
+
+```
+
+各項目の詳細は以下の通りです．
+
+- token, name, icon - ステップ2で既に設定済みです
+- order - "プラグイン:順番シャッフル"の設定
+    - text - 順番シャッフルの結果が投稿される際の冒頭メッセージ．
+    - デフォルトでは以下のようになってます．  
+        <img width="285" alt="01_shuffle" src="https://user-images.githubusercontent.com/51310314/113475279-8ebef900-94af-11eb-8c68-fb051f903a8a.png">
+
+- group - "プラグイン:グループ分け"の設定
+    - text - グループ分けの結果が投稿される際の冒頭メッセージ．
+    - デフォルトでは以下のようになってます．  
+        <img width="347" alt="02_group" src="https://user-images.githubusercontent.com/51310314/113475280-8ff02600-94af-11eb-8d51-a5189f3387b5.png">
+- gcalendar
+    - ステップ4で設定するため，現段階では編集不要です．
+
+
+### 3.2. 研究室メンバーの設定
+この設定は必ずボットの運用を開始する前に行ってください．
+
+研究室メンバーの設定は `config/member.yml` で行います． `member.yml` は以下の構成が繰り返し続くような内容になっています．1メンバーにつき以下ブロックを用意するようにしてください．
+
+```yml
+FamilyName:
+  name: LastName
+  class: [teacher, student, B3, B4, M1, M2]
+
+```
+
+各項目の詳細は以下の通りです．
+- FamilyName - メンバーの姓（キャピタライズ必須）（コロンの後ではなく前を書き換える）
+    - name - メンバーの名前（キャピタライズ必須）
+    - class - メンバーの所属するクラス
+        - 仕様上，学生には必ず `student` クラスを設定してください．
+        - 順番シャッフルやグループ分けの際に，指定クラスに所属するメンバーに限定した操作ができます．
+
+例えば，研究室のメンバーが以下であるとします．
+```
+- 先生 - 癒月ちょこ
+- 生徒 - 紫咲シオン，湊あくあ，百鬼あやめ，大空スバル
+```
+
+このときの `member.yml` は次のようになります．
+```yml
+Yuzuki:
+    name: Choco
+    class: teacher
+Murasaki:
+    name: Shion
+    class: student, manzi
+Minato:
+    name: Aqua
+    class: student, manzi
+Nakiri:
+    name: Ayame
+    class: student, manzi
+Ozora:
+    name: Subaru
+    class: student
+
+```
+
+メンバー情報の変更に限ってはコマンドでもできます．詳しくは `README.md` の `研究室メンバー設定` の[コマンド](#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89-1)を確認してください．
 
 
 ## 【4】Googleカレンダープラグインの設定
 所要時間 - 10分
 
-![01_open_calendar](https://user-images.githubusercontent.com/51310314/113472627-7e9f1d80-949f-11eb-978c-0dae27acfc18.png)
-![02_check_id](https://user-images.githubusercontent.com/51310314/113472628-819a0e00-949f-11eb-8dce-b880c3ecbae4.png)
-![03_access_gas](https://user-images.githubusercontent.com/51310314/113472629-82cb3b00-949f-11eb-8888-453f07177307.png)
-![04_open_editor](https://user-images.githubusercontent.com/51310314/113472630-8363d180-949f-11eb-97e6-ebcca194cc83.png)
-![05_open_deploy](https://user-images.githubusercontent.com/51310314/113472632-83fc6800-949f-11eb-99d1-5101680a94cc.png)
-![06_select_type](https://user-images.githubusercontent.com/51310314/113472634-8494fe80-949f-11eb-9b25-5181b6ec7039.png)
-![07_edit_deploy](https://user-images.githubusercontent.com/51310314/113472635-8494fe80-949f-11eb-9abd-0e29abcf3e9f.png)
-![08_copy_url](https://user-images.githubusercontent.com/51310314/113472637-852d9500-949f-11eb-970e-b2e27256d438.png)
+### Googleカレンダープラグインを利用しない方
+ボットの初期設定はこれで終了です．お疲れ様でした！
 
+`config.yml` の `gcalendar/gas` が以下のようなデフォルトのダミーURLの場合，自動的にプラグインが無効化されます．もし変更していてプラグインを使わない場合はボットが正常に動作しなくなるため，以下の内容をコピーしてデフォルトに戻しておいてください．
+
+```yml
+...
+gcalendar:
+  gas: https://script.google.com/macros/s/******/exec
+...
+```
+
+
+### Googleカレンダープラグインを利用する方
+予め，Googleアカウントとイベントを取得したいカレンダーを準備しておいてください．
+https://calendar.google.com/
+![01_open_calendar](https://user-images.githubusercontent.com/51310314/113472627-7e9f1d80-949f-11eb-978c-0dae27acfc18.png)
+
+![02_check_id](https://user-images.githubusercontent.com/51310314/113472628-819a0e00-949f-11eb-8dce-b880c3ecbae4.png)
+
+https://script.google.com/home
+![03_access_gas](https://user-images.githubusercontent.com/51310314/113472629-82cb3b00-949f-11eb-8888-453f07177307.png)
+
+![04_open_editor](https://user-images.githubusercontent.com/51310314/113472630-8363d180-949f-11eb-97e6-ebcca194cc83.png)
+
+![05_open_deploy](https://user-images.githubusercontent.com/51310314/113472632-83fc6800-949f-11eb-99d1-5101680a94cc.png)
+
+![06_select_type](https://user-images.githubusercontent.com/51310314/113472634-8494fe80-949f-11eb-9b25-5181b6ec7039.png)
+
+![07_edit_deploy](https://user-images.githubusercontent.com/51310314/113472635-8494fe80-949f-11eb-9abd-0e29abcf3e9f.png)
+
+![08_copy_url](https://user-images.githubusercontent.com/51310314/113472637-852d9500-949f-11eb-970e-b2e27256d438.png)

@@ -28,7 +28,15 @@ def get_week_event(channel: str) -> Tuple[bool, List[Dict[str, str]], str]:
         Tuple[bool, List[Dict[str, str]], str]: 取得成否，ウィークイベントアタッチメント，冒頭テキスト
     """
     conf = get_config()
-    gas = conf['gcalendar']['gas']          # GAS ウェブアプリURL
+    gas = conf['gcalendar']['gas']          # GASウェブアプリURL
+
+    # GASウェブアプリURLがデフォルト -> プラグイン無効
+    gas_dummy = 'https://script.google.com/macros/s/******/exec'
+    if gas == gas_dummy:
+        text = 'Googleカレンダープラグインは無効状態です．\n'
+        text += 'プラグインを有効化する際は `config.yml` を編集してください．\n'
+        post.slacker_simple_message(channel=channel, text=text, _type='error')
+        return False, [], ''
 
     # start_date = dt(2021, 2, 8)   # デバッグ用
     start_date = dt.now()                       # 取得開始日（実行日）
