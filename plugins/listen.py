@@ -7,6 +7,7 @@ import plugins.group as group
 import plugins.gcalendar as gcal
 import plugins.post as post
 import config.setting as setting
+import run
 
 # ロガー設定
 logger = getLogger(__name__)
@@ -85,6 +86,10 @@ def listen_command(message: Message) -> None:
             is_valid = False
             error_text = 'configコマンドの形式が間違ってます．\n'
             post.slackbot_simple_message(message, text=error_text, _type='error')
+    elif match(r'^!version$', command):
+        # バージョン表示
+        text = '*labot v{0}*\n'.format(run.VERSION)
+        post.slackbot_simple_message(message, text=text, _type='info')
     else:
         # 存在しないコマンド
         is_valid = False

@@ -30,7 +30,7 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-## 環境
+## 🔍 環境
 開発環境で，以下では動作確認済みという意味です．特別なことはしてないので3系であれば動くかと思います．
 
 - Python 3.8.2
@@ -38,7 +38,7 @@
 - まずはお好きな3系バージョンで[requirements.txt](./requirements.txt)のライブラリを入れてみてください（使い方参照）．
 
 
-## ディレクトリ構成
+## 📂 ディレクトリ構成
 ```
 .
 ├── LICENSE                 ライセンス
@@ -47,13 +47,14 @@
 │   ├── __init__.py         設定処理スクリプト
 │   ├── _config.yml         Bot設定
 │   ├── _gcalendar.gs       Googleカレンダープラグイン用スクリプト
-│   ├── _icon.png           Botアイコン
 │   ├── _member.yml         研究室メンバー設定
 │   ├── setting.py          設定読み書きスクリプト
 │   └── [ignore] job.txt    Crontabファイル（自動生成）
 ├── requirements.txt        必須Pythonパッケージ
 ├── requirements_dev.txt    必須Pythonパッケージ（開発環境）
-├── guide.md                Bot初期設定説明
+├── guide                   Bot初期設定ガイド
+│   ├── images              説明用画像
+│   └── README.md           Bot初期設定説明
 ├── plugins                 Botプラグイン
 │   ├── __init__.py         パッケージ用
 │   ├── gcalendar.py        プラグイン:Googleカレンダー
@@ -65,7 +66,7 @@
 └── slackbot_settings.py    slackbot設定ファイル（編集不要）
 ```
 
-## 起動までの流れ
+## 🚀 起動までの流れ
 1. **本リポジトリをクローンする**
     - 研究室用のサーバーなど，常時稼働できる環境をオススメします．システムへの負担はほとんどないと思います．
     - SSHの場合（鍵設定を別途行ってください）
@@ -84,7 +85,7 @@
         pip install -r requirements.txt
         ```
 3. **初期設定する**
-    - 詳細は[guide.md](./guide.md)を確認してください
+    - 詳細は[guide.md](./guide/README.md)を確認してください
     - 一部項目は最初に必ず設定しないとBotが全く動作しません
 
 4. **起動する**
@@ -99,10 +100,10 @@
     - 終了時は `ctrl+c` や `kill` など使ってください
     - `config.yml` の設定は再起動の必要なくすぐに反映されます．ただし，APIトークンやGoogleカレンダープラグインのスケジュール設定など，Bot起動時に必要な設定を変更した場合は再起動が必要です．
 
-## 設定
-初期設定については[guide.md](./guide.md)をご確認ください．
+## 🔧 設定
+初期設定については[guide.md](./guide/README.md)をご確認ください．
 
-### Bot設定 - [config.yml](./_config.yml)
+### Bot設定 - [config.yml](./config/_config.yml)
 #### yml
 ```yml
 token: x***-********-********-****************
@@ -120,7 +121,7 @@ gcalendar:
   text: お疲れ様です！今週も頑張っていきましょう！
 ```
 
-- `token` - Slack API トークン（[guide.md](./guide.md)参照）
+- `token` - Slack API トークン（[guide.md](./guide/README.md)参照）
 - `name` - Botの名前．Botからメッセージが返される際に適用されます．
 - `icon` - Botのアイコン画像ファイル直リンク．Botからメッセージが返される際に適用されます．
 - `order` - "プラグイン:順番シャッフル"に関連する設定
@@ -128,7 +129,7 @@ gcalendar:
 - `group` - "プラグイン:グループ分け"に関連する設定
     - `text` - グループ分け結果メッセージ投稿時の冒頭テキスト
 - `gcalendar` - "プラグイン:Googleカレンダー"に関連する設定
-    - `gas` - GASウェブアプリURL（[guide.md](./guide.md)参照）
+    - `gas` - GASウェブアプリURL（[guide.md](./guide/README.md)参照）
     - `channel` - ウィークイベント投稿チャンネル名
     - `time` - ウィークイベント投稿曜日＆時間（ex. `mon9`）
     - `colors` - 投稿メッセージに使用する曜日カラー．16進数カラーコードで指定する（シャープ不要）．デフォルトカラーは以下の通り．
@@ -144,7 +145,11 @@ gcalendar:
     - `text` - ウィークイベント投稿時の冒頭テキスト
 
 #### コマンド
-コマンドでの読み書きはできません．`config.yml` を参照・編集してください．
+コマンドでの読設定の読み書きはできません．`config.yml` を参照・編集してください．
+- labotのバージョンを確認する
+    ```
+    !version
+    ```
 
 
 ### 研究室メンバー設定 - [member.yml](./_member.yml)
@@ -199,7 +204,7 @@ FamilyName:
         !config edit Tanaka class student,M1
         ```
 
-## プラグイン
+## 🔌 プラグイン
 - このBotには現在以下のプラグイン（機能）が用意されてます．
 - コマンド入力時は頭に `!` を必ずつけてください（`/` ではありません）
 
@@ -243,7 +248,7 @@ FamilyName:
 
 ### [**gcalendar**](./plugins/gcalencar.py) - Googleカレンダー
 - GASで登録したGoogleカレンダーから取得日を含む1週間分のイベント（ウィークイベント）を取得し，投稿します．
-- Googleカレンダー登録の詳細は[guide.md](./guide.md)を確認してください．
+- Googleカレンダー登録の詳細は[guide.md](./guide/README.md)を確認してください．
 - ウィークイベントは `config.yml` で指定した曜日＆時間に自動的に毎週投稿されます．
 - 定期実行だけでなく，以下コマンドでウィークイベントを確認することもできます．
 - コマンド
@@ -251,6 +256,6 @@ FamilyName:
     - `!gcal schedule` - Googleカレンダーからイベントを自動的に取得する曜日と時間を取得する．
 
 
-## お問い合わせ
+## ☎️ お問い合わせ
 - 本リポジトリについて質問等ありましたら，[Twitter](https://twitter.com/nyu923)へのリプライが最も反応が早いです（DMはご遠慮ください）．
 - イシューを立てて頂いても結構です．
