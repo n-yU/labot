@@ -1,6 +1,6 @@
 {
 	"name": "labot",
-    "context": "..",
+	"context": "..",
 	"dockerFile": "./Dockerfile",
 	"settings": {
 		"workbench.startupEditor": "newUntitledFile",
