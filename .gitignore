@@ -5,3 +5,6 @@ config.yml
 member.yml
 job.txt
 gcalendar.gs
+
+test.yml
+tests

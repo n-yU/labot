@@ -4,4 +4,5 @@ python-crontab==2.5.1
 croniter==1.0.10
 joblib==1.0.1
 autopep8==1.5.6
-pyflakes==2.3.1
+flake8==3.9.0
+pytest==6.2.3
