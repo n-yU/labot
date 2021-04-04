@@ -3,7 +3,6 @@
 
 ![ライセンス](https://img.shields.io/github/license/n-yU/labot)
 ![コードサイズ](https://img.shields.io/github/languages/code-size/n-yU/labot)
-![ツイッター](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fn-yU%2Flabot)
 
 - 研究室用のSlackワークスペースを利用している方に便利なSlackボットです．
 - 私が所属する大学研究室のSlackワークスペースで以前から実際に稼働していたボットがベースです．
