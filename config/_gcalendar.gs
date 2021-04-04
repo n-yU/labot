@@ -1,6 +1,6 @@
 // カレンダーID（外部に漏れないよう注意！）
 // "_gcalendar.gs"を同じ場所にコピーして"gcalendar.gs"にリネームしてから3行目を追記してください
-var calId = ""
+var calId = "(ここにIDをペースト)"
 
 function doGet(e) {
   start_date_year = e.parameter.year;

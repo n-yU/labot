@@ -10,4 +10,4 @@ gcalendar:
   channel: calendar
   time: mon9
   colors: [f8e352, d5848b, 7b9ad0, 51a1a2, ae8dbc, c08e47, e5ab47]
-  msg: お疲れ様です！今週も頑張っていきましょう！
+  text: お疲れ様です！今週も頑張っていきましょう！

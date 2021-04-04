@@ -89,6 +89,7 @@ def listen_command(message: Message) -> None:
     elif match(r'^!version$', command):
         # バージョン表示
         text = '*labot v{0}*\n'.format(run.VERSION)
+        text += 'https://github.com/n-yU/labot'
         post.slackbot_simple_message(message, text=text, _type='info')
     else:
         # 存在しないコマンド
