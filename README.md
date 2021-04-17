@@ -83,12 +83,15 @@
         git clone --depth 1 https://github.com/n-yU/labot.git
         ```
     - `--depth 1` はshallow cloneで，リポジトリの最新版のみ取得するオプションです
+    - もしくは[コチラ](https://github.com/n-yU/labot/releases/tag/v1.0.0-alpha)からzipやtar.gzファイルをダウンロードしてください
+
 2. **Pythonインストール＆以下コマンド実行**
     - Pythonのインストール方法は省略します．dockerやvenv等使って用意してください．
     - `3.8.2` で動作確認済みですが，多少バージョンが違っても多分動きます．
         ```
         pip install -r requirements.txt
         ```
+        
 3. **初期設定する**
     - 詳細は[guide.md](./guide/README.md)を確認してください
     - 一部項目は最初に必ず設定しないとBotが全く動作しません
@@ -102,7 +105,7 @@
         ```
         nohup python3 run.py &
         ```
-    - 終了時は `ctrl+c` や `kill` など使ってください
+    - 終了時は `ctrl+c` や `kill` コマンドなど使ってください
     - `config.yml` の設定は再起動の必要なくすぐに反映されます．ただし，APIトークンやGoogleカレンダープラグインのスケジュール設定など，Bot起動時に必要な設定を変更した場合は再起動が必要です．
 
 ## 🔧 設定
@@ -136,7 +139,7 @@ gcalendar:
 - `gcalendar` - "プラグイン:Googleカレンダー"に関連する設定
     - `gas` - GASウェブアプリURL（[guide.md](./guide/README.md)参照）
     - `channel` - ウィークイベント投稿チャンネル名
-    - `time` - ウィークイベント投稿曜日＆時間（ex. `mon9`）
+    - `time` - ウィークイベント投稿曜日＆時間（ex. `mon9`（月曜9時））
     - `colors` - 投稿メッセージに使用する曜日カラー．16進数カラーコードで指定する（シャープ不要）．デフォルトカラーは以下の通り．
 
         <!-- - ref.) https://qiita.com/suin/items/1f3898c1fa108b1e47b1 -->
@@ -162,7 +165,7 @@ gcalendar:
 ```yml
 FamilyName:
   name: LastName
-  class: [studen, teacher, B3, B4, M1, M2]
+  class: [student, teacher, B3, B4, M1, M2]
 ```
 
 - `Family Name` - メンバー姓．順番シャッフルやグループ分けの結果を表示する際に使用されます．キャピタライズしてください．
@@ -234,7 +237,7 @@ FamilyName:
 
 ### [**group**](./plugins/group.py) - グループ分け
 - `member.yml`で設定済みのメンバーに対し，指定クラスに所属するメンバーをグループ分けして投稿します．
-- ZoomのBoRの割り当てを決めたいときなどに使えます．
+- ZoomのBORの割り当てを決めたいときなどに使えます（全員ではなくクラスごとに）．
 - グループ間のメンバー数差が最小になるように分けられます．
 - グループ分けの基準として，グループ数や1グループメンバー数が指定できます．
 - コマンド
@@ -246,12 +249,12 @@ FamilyName:
         ```
         !group n3 student
         ```
-    - 例2: 全メンバーを対象に2人のグループ（ペア）を作る．
+    - 例2: `M1`クラスに所属するメンバーを対象に2人のグループ（ペア）を作る．
         ```
-        !group n2 all
+        !group s2 M1
         ```
 
-### [**gcalendar**](./plugins/gcalencar.py) - Googleカレンダー
+### [**gcalendar**](./plugins/gcalendar.py) - Googleカレンダー
 - GASで登録したGoogleカレンダーから取得日を含む1週間分のイベント（ウィークイベント）を取得し，投稿します．
 - Googleカレンダー登録の詳細は[guide.md](./guide/README.md)を確認してください．
 - ウィークイベントは `config.yml` で指定した曜日＆時間に自動的に毎週投稿されます．

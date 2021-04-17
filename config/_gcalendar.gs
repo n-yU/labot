@@ -11,7 +11,6 @@ function doGet(e) {
   ));
 
   // ref.) https://qiita.com/tfuruya/items/3c306ee03d1ac290bcef
-  ContentService.createTextOutput();
   var output = ContentService.createTextOutput();
   output.setMimeType(ContentService.MimeType.JSON);
   output.setContent(payload);
